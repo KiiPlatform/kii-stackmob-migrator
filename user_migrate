@@ -1,0 +1,50 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+# vim:set sts=4 sw=4 tw=0 et:
+
+import kii_cloud
+import argparse
+import json
+import os
+import sys
+import re
+import stackmob
+
+USERS = None
+BUCKETS = None
+
+def parse_args():
+    parser = argparse.ArgumentParser(
+            description='Move user data from Stackmob to Kii Cloud')
+    parser.add_argument('-o', '--app_id',
+            help='App ID of your app on Kii Cloud', required=True)
+    parser.add_argument('-k', '--app_key',
+            help='App Key of your app on Kii Cloud', required=True)
+    parser.add_argument('-r', '--region', help='Specify "jp" for Japan server')
+    parser.add_argument('-i', '--stackmob_key', help="Your app's public key from StackMob", required=True)
+    parser.add_argument('-s', '--stackmob_secret', help="Your app's private key from StackMob", required=True)
+    return parser.parse_args()
+
+def migrate_user(kii_id, kii_key, kii_region, stackmob_key, stackmob_secret):
+
+    kii_cloud.init(kii_id, kii_key, kii_region)
+
+    # get the collection results from SM
+    stackmob.init(stackmob_key, stackmob_secret)
+
+    resp = stackmob.get("user")
+    data = resp.read()
+
+    json_resp = json.loads(data)
+    for item in json_resp:
+        # create a kii object
+        item['loginName'] = item['username']
+        item['displayName'] = item['username']
+        item['password'] = "123456" # SUGGESTED: CHANGE THIS
+        succ = kii_cloud.create_user(item)
+        print "Added user " + item['username'] + " => " + str(succ)
+
+
+if __name__=="__main__":
+    args = parse_args()
+    migrate_user(args.app_id, args.app_key, args.region, args.stackmob_key, args.stackmob_secret)

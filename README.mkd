@@ -1,0 +1,67 @@
+# Kii Stackmob Migrator
+
+This is a very simple data migration tool to assist in migrating your app from Stackmob to Kii Cloud. Please read the following notes and feel free to modify, fork and redistribute the code as you wish. 
+
+Migration is not easy! A single script will likely fall short at solving all your issues. If you are working on migration, contact us at support@kii.com and we're happy to assist in the process!
+
+## Tutorial
+
+Install: clone repository of migration tool.
+
+    $ git clone git@github.com:KiiPlatform/kii-stackmob-migrator.git
+    $ cd kii-stackmob-migrator
+
+or download zip of the tool and extract it.
+
+    $ curl -o kii-stackmob-migrator.zip -L https://github.com/KiiPlatform/kii-stackmob-migrator/archive/master.zip 
+    $ unzip master.zip
+    $ cd kii-stackmob-migrator-master
+
+Call current directory as TOPDIR.
+
+Prepare App ID (APP_ID) and Key (APP_KEY) from [Kii Cloud developer portal](https://developer.kii.com).
+
+Prepare App Public Key and App Private Key from [Stackmob dashboard](https://dashboard.stackmob.com).
+
+Migration happens in phases, be sure to tweak to handle your app properly
+
+### Migrating users
+
+Users are pulled from the /user collection in Stackmob and registered within your app in Kii Cloud
+
+> Default password is set to "123456". We suggest you modify this flow to suit your app.
+
+To run, try this:
+    
+    $ python user_migrate -o {KII_APP_ID} -k {KII_APP_SECRET} -i {STACKMOB_PUBLIC_KEY} -s {STACKMOB_PRIVATE_KEY}
+
+### Migrating key/value data
+
+To migrate data, run the following command for each of your collections:
+
+    $ python collection_migrate -o {KII_APP_ID} -k {KII_APP_SECRET} -i {STACKMOB_PUBLIC_KEY} -s {STACKMOB_PRIVATE_KEY} -c {STACKMOB_COLLECTION_NAME}
+
+
+> Note: Kii's data storage is schemaless! So you don't have to worry about pre-defining anything. The script, by default, also retains your existing object IDs.
+
+### Resetting key/value data
+
+Did something go wrong? Use the reset_kii_bucket command to reset a collection within Kii Cloud
+
+    $ python reset_kii_bucket -o {KII_APP_ID} -k {KII_APP_SECRET} -b {COLLECTION_NAME}
+
+
+## Contribution
+
+*   [httplib2](https://code.google.com/p/httplib2/)
+*   [oauth](https://code.google.com/p/oauth/)
+
+
+## Limitation
+
+Migrated objects are not counted in developer portal Web UI.  It is an isssue
+of Web UI, and will be fixed soon.  (CMO-3228)
+
+A new user `kii_migrator` (password: `12345678` is created automatically.
+
+All migrated users have same password `123456`.

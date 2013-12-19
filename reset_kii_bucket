@@ -1,0 +1,29 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+# vim:set sts=4 sw=4 tw=0 et:
+
+import argparse
+import kii_cloud
+import stackmob
+
+USERS = None
+BUCKETS = None
+
+def parse_args():
+    parser = argparse.ArgumentParser(
+            description='Move collection data from Stackmob to Kii Cloud')
+    parser.add_argument('-o', '--app_id',
+            help='App ID of your app on Kii Cloud', required=True)
+    parser.add_argument('-k', '--app_key',
+            help='App Key of your app on Kii Cloud', required=True)
+    parser.add_argument('-b', '--kii_bucket', help="The Kii bucket you wish to reset", required=True)
+    parser.add_argument('-r', '--region', help='Specify "jp" for Japan server')
+    return parser.parse_args()
+
+def delete_bucket(kii_id, kii_key, kii_region, kii_bucket):
+    kii_cloud.init(kii_id, kii_key, kii_region)
+    print "Deleted bucket '" + kii_bucket + "' => " + str(kii_cloud.delete_bucket(kii_bucket))
+
+if __name__=="__main__":
+    args = parse_args()
+    delete_bucket(args.app_id, args.app_key, args.region, args.kii_bucket)
