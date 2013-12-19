@@ -59,9 +59,6 @@ Did something go wrong? Use the reset_kii_bucket command to reset a collection w
 
 ## Limitation
 
-Migrated objects are not counted in developer portal Web UI.  It is an isssue
-of Web UI, and will be fixed soon.  (CMO-3228)
-
 A new user `kii_migrator` (password: `12345678` is created automatically.
 
 All migrated users have same password `123456`.
