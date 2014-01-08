@@ -62,3 +62,7 @@ Did something go wrong? Use the reset_kii_bucket command to reset a collection w
 A new user `kii_migrator` (password: `12345678` is created automatically.
 
 All migrated users have same password `123456`.
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/KiiPlatform/kii-stackmob-migrator/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
